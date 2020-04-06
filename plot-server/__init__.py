@@ -1,7 +1,25 @@
-from flask import Flask
+import os
+from flask import Flask, jsonify, render_template
+from .county import get_c19_data_county
+from .graph import graph_county_df
+from .countylist import COUNTIES
 
-app = Flask(__name__)
+if "static-path" in os.environ:
+  app = Flask(__name__, static_folder=os.environ['static-path']+'/static', template_folder=os.environ['static-path'])
+  
+else:
+  app = Flask(__name__)
+
 
 @app.route('/')
 def home():
-  return "Hello World"
+  return render_template("index.html")
+
+@app.route('/api/<int:county_id>')
+def county_api(county_id):
+  df = get_c19_data_county(COUNTIES[county_id])
+  if df is not None:
+    data = graph_county_df(df)
+    return jsonify(data)
+  else:
+    return jsonify({"count":"", "sum":""})
