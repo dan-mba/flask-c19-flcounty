@@ -8,7 +8,7 @@ if "static-path" in os.environ:
   app = Flask(__name__, static_folder=os.environ['static-path']+'/static', template_folder=os.environ['static-path'])
   
 else:
-  app = Flask(__name__)
+  app = Flask(__name__, static_folder='/usr/src/app/static', template_folder='/usr/src/app/template')
 
 
 @app.route('/')
