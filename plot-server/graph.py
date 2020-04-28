@@ -18,13 +18,12 @@ def plt_to_png(fig):
   return 'data:image/png;base64,{}'.format(graph_url)
 
 def graph_county_df(df):
-  df = df[['Count']]
-  count = df.groupby('EventDate').count()
-  count['Sum'] = count.cumsum()
+  df['Sum'] = df['FREQUENCY'].cumsum()
+  df.head()
   return_val={}
 
   f1, ax1 = plt.subplots(figsize=(10, 7.5), constrained_layout=True, dpi=72)
-  ax1.plot(count.index, count.Sum, marker='.', markersize=12)
+  ax1.plot(df.index, df['Sum'], marker='.', markersize=12)
   locator = mdates.AutoDateLocator(minticks=4, maxticks=10)
   formatter = mdates.ConciseDateFormatter(locator)
   formatter.offset_formats = ['', '', '', '', '', '', ]
@@ -39,7 +38,7 @@ def graph_county_df(df):
   return_val['sum'] = plt_to_png(f1)
 
   f2, ax2 = plt.subplots(figsize=(10, 7.5), constrained_layout=True, dpi=72)
-  ax2.bar(count.index, count['Count'])
+  ax2.bar(df.index, df['FREQUENCY'])
   locator = mdates.AutoDateLocator(minticks=4, maxticks=10)
   formatter = mdates.ConciseDateFormatter(locator)
   formatter.offset_formats = ['', '', '', '', '', '', ]
