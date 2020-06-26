@@ -31,8 +31,10 @@ def get_c19_data_county(county):
       if 'features' in json:
         dataset = dataset + list(item['attributes'] for item in json['features'])
       else:
+        print(json)
         return None
     else:
+      print(response)
       return None
 
   df = pd.DataFrame.from_records(dataset)
